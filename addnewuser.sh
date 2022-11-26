@@ -66,4 +66,6 @@ echo "NEW USER ADDITION TO SERVER, NEW GROUP AND SUDOERS GROUP SUCCESSFULL"
 echo "New app code by Stelian"
 Mkdir Github review g12
 touch how to install git in my environment
+best coding
+
 
