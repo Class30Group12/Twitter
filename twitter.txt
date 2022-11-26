@@ -15,3 +15,13 @@ Psalm 23 A psalm of David.
  my cup overflows.
  Surely goodness and love will follow me all the days of my life,
  and I will dwell in the house of the LORD forever.
+ 
+ echo "this changes are made by stelian"
+ I cloned and fetched the twitter directory from github to my local repo then i pulled to my working area. 
+
+  My next steps will be to commit the changes and merge to make sure do not have any conflict. 
+ 
+Let me know if you see the changes
+
+God Bless you
+
