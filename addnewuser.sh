@@ -63,4 +63,7 @@ sudo echo "$added_username ALL = (ALL) NOPASSWD:ALL" | sudo tee "/etc/sudoers.d/
 echo "HURRAY! JOB COMPLETED"
 
 echo "NEW USER ADDITION TO SERVER, NEW GROUP AND SUDOERS GROUP SUCCESSFULL"
+echo "New app code by Stelian"
+Mkdir Github review g12
+touch how to install git in my environment
 
