@@ -1,0 +1,2 @@
+#!/bin/bash
+#this is my year of devops and next year will be better
