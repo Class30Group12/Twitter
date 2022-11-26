@@ -1,0 +1,5 @@
+#!/bin/bash
+my first work 
+from home
+thanks for helping
+
