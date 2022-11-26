@@ -14,4 +14,10 @@ Psalm 23 A psalm of David.
  You anoint my head with oil;
  my cup overflows.
  Surely goodness and love will follow me all the days of my life,
- and I will dwell in the house of the LORD forever.
+ and I will dwell in the house of the LORD forever
+
+
+echo "Gbemi is adding a new code to this text"
+Amen and Amen
+#Testing pull/Fetch/Clone from Github to local area
+
