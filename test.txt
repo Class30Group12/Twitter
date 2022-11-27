@@ -1,0 +1,4 @@
+#!/bin/bash
+#This file is created to test the push and pull command to the master branch in github
+#It can be done
+#God bless you!
