@@ -1,2 +1,3 @@
 #!/bin/bash
 #this is my year of devops and next year will be better
+# Just checking how pull works
