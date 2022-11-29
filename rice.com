@@ -1,3 +1,4 @@
+i
 #!/bin/sh
 a script to order food
 echo choose meal name
@@ -8,3 +9,7 @@ then
 else 
     echo food is not read
 fi
+echo "read meal time"
+All menu details should be shared with clients
+ .gitignore 
+
