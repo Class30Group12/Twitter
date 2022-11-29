@@ -7,6 +7,9 @@ back again, not sure where this ended up.
 Author: Olaide
 
 
+
+Added the below from the remote repo:
+
 Congratulations you were able to push a different file.
 
 We must try to understand how to work on one project
@@ -16,3 +19,10 @@ one file
 pull, update files and push back to the remote repo
 
 Godswill
+
+
+Pulled the filed from the remote repo and added the below to the file:
+
+
+Knowledge is power.
+God help us
