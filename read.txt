@@ -5,3 +5,14 @@
 back again, not sure where this ended up. 
 #If you see this please let me know.
 Author: Olaide
+
+
+Congratulations you were able to push a different file.
+
+We must try to understand how to work on one project
+
+one file
+
+pull, update files and push back to the remote repo
+
+Godswill
