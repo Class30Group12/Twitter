@@ -1,0 +1,6 @@
+#!bin/bash
+echo "what are the seasons"
+winter
+spring
+summer
+autumm
