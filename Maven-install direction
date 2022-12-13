@@ -1,0 +1,105 @@
+[ec2-user@ip-172-31-28-244 ~]$ hostname
+ip-172-31-28-244.us-east-2.compute.internal
+
+#change hostname with hostnamectl
+
+1. [ec2-user@ip-172-31-28-244 ~]$ sudo hostnamectl set-hostname maven
+	[ec2-user@ip-172-31-28-244 ~]$ hostname
+	maven
+	[ec2-user@ip-172-31-28-244 ~]$ whoami
+	ec2-user
+	[ec2-user@ip-172-31-28-244 ~]$ sudo su - ec2-user
+	Last login: Sat Dec  3 04:58:46 UTC 2022 from 99.85.94.92 on pts/1
+
+2. [ec2-user@maven ~]$ cd /opt
+
+	# to install nano, tree, unzip and git 
+	[ec2-user@maven opt]$ sudo yum install wget nano tree unzip git-all -y
+
+	# to confirm git has been installed 
+	git --version
+
+	# to confirm java has been installed
+	java --version
+	#(java not installed yet)
+	#run below to install java:
+	sudo yum install java-11-openjdk-devel java-1.8.0-openjdk-devel -y
+	# to confirm java has been installed
+	java --version
+	git --version
+
+	#install vim too
+	sudo yum install vim
+
+3. # download and extract the maven software
+	sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.zip
+
+	[ec2-user@maven opt]$ ll
+	-rw-r--r--. 1 root root 8760013 Jun  6 16:45 apache-maven-3.8.6-bin.zip
+
+	apache is owned by the root user and cannot be extracted by ec2-user so we use sudo to unzip the apache file
+
+	sudo unzip apache-maven-3.8.6-bin.zip
+
+
+	[ec2-user@maven opt]$ ll
+	total 8556
+	drwxr-xr-x. 6 root root      99 Jun  6 16:16 apache-maven-3.8.6
+	-rw-r--r--. 1 root root 8760013 Jun  6 16:45 apache-maven-3.8.6-bin.zip
+
+	We now have the zipped and unzippd files so we have to remove the unzipped file
+
+	sudo rm -rf apache-maven-3.8.6-bin.zip
+
+
+	[ec2-user@maven opt]$ ll
+	total 0
+	drwxr-xr-x. 6 root root 99 Jun  6 16:16 apache-maven-3.8.6
+
+
+4. change the name to maven.
+
+	sudo mv apache-maven-3.8.6/ maven
+
+Still in the /opt directory:
+#step 5.3
+	set environmental variables for maven
+	[ec2-user@maven opt]$ vi ~/.bash_profile 
+	# and add lines below
+	export M2_HOME=/opt/maven [home directory]
+	export PATH=$PATH:$M2_HOME/bin (The path to execute maven commands)
+  
+  export M2_HOME=/opt/maven
+  export PATH=$PATH:$M2_HOME/bin
+
+#step 6.4 
+	Refresh the profile file and verify if maven is running
+	hos
+	[ec2-user@maven opt]$ source ~/.bash_profile
+
+	[ec2-user@maven opt]$ mvn --version
+
+	in the MHD contains 
+	bin  boot  conf  lib  LICENSE  NOTICE  README.txt
+
+  
+  PROJECT FILES TO BUILD COMING FROM THE REMOTE REPOSITORY:
+	https://github.com/Landmark-Technologies/maven-standalone-application
+
+		https://github.com/LandmakTechnology/maven-web-application
+
+7.0 create a directory called java-projects
+	cd into the directory
+
+	and clone the repository :
+
+	[ec2-user@maven java-projects]$ git clone https://github.com/Landmark-Technologies/maven-standalone-application
+	check content of the repository with ls
+
+ 8. maven-standalone-application
+	 rename the directory with the mv command
+	 mv maven-standalone-application msa
+	 msa
+	 cd msa
+
+ 9. to run mvn package we have to look for the location of the pluggins and dependencies in the local repo: .m2/repository
