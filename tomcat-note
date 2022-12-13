@@ -1,0 +1,292 @@
+#Tomcat Installation
+# Steps for Installing tomcat9 on rhel7&8
+# install Java JDK 1.8+ as a pre-requisit for tomcat to run.
+# https://github.com/LandmakTechnology/package-management/tree/main/Tomcat-installation
+sudo hostnamectl set-hostname tomcat
+cd /opt
+sudo yum install git wget vim -y
+sudo yum install java-1.8.0-openjdk-devel -y
+java -version [only one -]
+# Download tomcat software and extract it.
+# dowanload and extract tomcat software
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
+sudo tar -xvf apache-tomcat-9.0.70.tar.gz
+sudo rm apache-tomcat-9.0.70.tar.gz
+sudo mv apache-tomcat-9.0.70 tomcat9
+sudo chmod 777 -R /opt/tomcat9
+sudo sh /opt/tomcat9/bin/startup.sh
+# create a soft link to start and stop tomcat from anywhere
+# to manage tomcat as a service
+sudo ln -s /opt/tomcat9/bin/startup.sh /usr/bin/starttomcat
+sudo ln -s /opt/tomcat9/bin/shutdown.sh /usr/bin/stoptomcat
+sudo starttomcat
+echo "end on tomcat installation"
+
+sudo su - ec2-user
+
+
+sudo ln -s /opt/tomcat9/bin/startup.sh /usr/bin/starttomcat
+sudo ln -s /opt/tomcat9/bin/shutdown.sh /usr/bin/stoptomcat
+
+
+ln: failed to create symbolic link '/usr/bin/starttomcat': File exists
+ln: failed to create symbolic link '/usr/bin/stoptomcat': File exists
+
+
+How do I confirm tomcat had been installed and which directory can find it.
+
+[ec2-user@tomcat ~]$ cd /opt/
+[ec2-user@tomcat opt]$ ls
+tomcat9
+[ec2-user@tomcat opt]$ cd tomcat9/
+[ec2-user@tomcat tomcat9]$ pwd
+/opt/tomcat9    
+what is the TOMCAT home directory: [TOMCAT home directory THD] where the TOMCAT software is extracted
+Common use cases /app/tomcat or /usr/local/tomcat or /opt/tomcat9
+In the THD we have: bin, conf, webapps, lib, logs, LICENSE, README.md etc
+
+#using absolute paths, one can start up or shut down tomcat
+
+sudo sh /opt/tocat9/bin/startup.sh or [relative path sh startup.sh]
+
+sudo sh /opt/tocat9/bin/shutdown.sh 
+
+
+How do I verify if tomcat service is running.
+1.  ps -ef | grep tomcat 
+2. curl -v localhost:8080
+2. curl -v IPaddress:8080
+3. 18.216.60.239:8080 (paste on the browser)
+
+
+We can start or stop tomcat START AND STOP TOMCAT
+$ sudo starttomcat OR  sudo bin/catalina.sh start
+$ stoptomcat OR  bin/catalina.sh stop depending on the directory from where you are runing the command
+
+when you stoptomcat 
+and run 
+ps -ef | grep tomcat
+you will notice tomcat has stopped running but when you start tomcat with 
+sudo starttomcat 
+and run
+ps -ef | grep tomcat, you notice tomcat has started running again.
+
+
+HOW TO CONFIGURE A TOMCAT SERVER
+
+Go to the conf/server.xml to change some things.
+
+sudo bin/catalina.sh start
+
+click manager app on the server
+
+TOMCAT is configured to be accessed only by internal through TOMCAT server.
+enable EXTRNAL access
+access tomcat as a localhost
+http://localhost:PORT NUMBER 8080 or 8177
+http://localhost:8080 or 8177
+http://IPaddress:8080 or 8177
+ 
+ To enable external TOMCAT access: 
+ search for a file context.xml
+ sudo find / -name context.xml | hhhhh another:| sudo find / -name server.xml to access TOMCAT externally, one has to vim into this server.xml file to know what is the hostname.
+  OR follow below:
+  So to access TOMCAT externally edit the below script:
+ we have to vi into the context.xml script:
+
+vi /opt/tomcat9/webapps/manager/META-INF/context.xml
+
+AND comment:
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<Context antiResourceLocking="false" privileged="true" >
+  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+                   sameSiteCookies="strict" />
+<!--
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> 
+-->
+
+  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+</Context>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+<!--
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> 
+-->
+
+ <!--
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+          -->
+
+
+
+ <!-- 
+ and 
+ -->
+ AFTER EDITING OR COMMENTING ON THE Valve className== "context.xml file" WE PASTE THE "http://IPaddress:8080 or 8177" AND WE WILL SEE THE BROWSER WILL ASK FOR USERNAME AND PASSWORD IF CLICKED ON MANAGER
+
+ WE NEED TO ADD TOMCAT UserS and PERMISSIONS:
+  vi /opt/tomcat9/conf/tomcat-users.xml  # to add user
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  <!--
+  <role rolename="tomcat"/>
+  <role rolename="role1"/>
+  <user username="tomcat" password="<must-be-changed>" roles="tomcat"/>
+  <user username="both" password="<must-be-changed>" roles="tomcat,role1"/>
+  <user username="role1" password="<must-be-changed>" roles="role1"/>
+-->
+ ------------------------------------------------------------------
+  <user username="class30" password="admin123" roles="admin-gui"/>
+  <user username="landmark" password="admin123" roles="manager-gui,admin-gui, manager-script"/>
+  <user username="simon" password="admin123" roles="admin-gui"/>
+  <user username="Gozie" password="Gozie1971" roles="manager-gui,admin-gui, manager-script"/>
+-----------------------------------------------------------------
+  </tomcat-users>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DEPLOY FILE BY UPLAODING:
+With the above permission, Gozie should be able to go into the manager App. 
+A different window opens from where we can uplaod our .WAR file to deploy. (Google Chrome is working but Microsoft Edge not working).
+Sign in as a manager
+Select WAR file to upload
+DEPLOY
+file appears on the backend chart
+click to display the server.
+
+
+Another way of deploying
+Deplyong application to TOMCAT FROM BUILD SAVER : *******
+NOTE this is from MAVEN SERVER
+ec2-user@maven ~$ ls
+ec2-user@maven ts$ mv maven-web-application/ web
+ec2-user@maven web$
+
+
+                    
+FROM THE MAVEN SERVER:
+
+Go to the maven saver from inside the target directory
+create a key.pem
+ec2-user@maven web$ vi key.pem 
+[the key for the TOMCAT server: copy the ket and paste inside the created key.pem file]
+ls -l key.pem # exposes the permision on the file
+# use chmod to modify the file to 400
+ec2-user@maven web$ chmod 400 key.pem (to secure the jey to only read access)
+
+ec2-user@maven web$ scp -i key.pem target/tesla.war ec2-user@18.216.60.239:/opt/tomcat9/webapps/
+                      TOMCATkeypair    maven.warfile        TOMCAT SERVER IP
+
+
+ec2-user@maven web$ scp -i key.pem target/tesla.war ec2-user@18.191.253.18:/opt/tomcat9/webapps/
+                                                       TOMCAT SERVER IP
+create key file copied from tomcat key [key.pem]
+change the key to have only read access
+
+[ec2-user@maven mwa]$ ll key.pem
+-rw-r--r--. 1 ec2-user ec2-user 1679 Dec 11 04:57 key.pem
+[ec2-user@maven mwa]$ chmod 400 key.pem
+[ec2-user@maven mwa]$ ll key.pem
+-r--------. 1 ec2-user ec2-user 1679 Dec 11 04:57 key.pem
+
+scp -i key.pem target/Landmark.war ec2-user@18.191.253.18:/opt/tomcat9/webapps/
+                                          172.31.43.208 (private IP address if on the same system)
+
+    IF THE TWO SERVERS ARE FROM DIFFERENT ORIGIN example Ubuntu and RedHat, a Public IP may work. all the same try both in any case one did not work.
+
+ scp -i key.pem target/Landmark.war ec2-user@ 172.31.43.208:/opt/tomcat9/webapps/   [using local IP address of tomcat worked: transferred the file]                                      
+This command line transfers the tesla.war file from maven server into the tomcat server using the tomcat key
+
+
+hot fixes
+
+Update the backend/refresh and you will see the output of the built file. not as .war (Landmark.war but as Landmark).
+Click on the file to see the web page.
+needing any corrections {hot fixes}, then go to the command line {{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}
+
+[ec2-user@tomcat tomcat9]$ sudo ls webapps/Landmark
+images  jsps  META-INF  WEB-INF
+###### work up to home.jsp file. the file that reads the web page content {{}} vi into it and correct accordingly and refresh web page and corrected is updated.
+[ec2-user@tomcat tomcat9]$ sudo ls webapps/Landmark/jsps
+home.jsp
+[ec2-user@tomcat tomcat9]$ sudo vi webapps/Landmark/jsps/home.jsp
+[ec2-user@tomcat tomcat9]$
+
+Changes were updated automatically because of the SERVER.XML content in conf directory:
+unpackWARs="true" autodeply="true">
+
+IN THE TOMCAT SERVER
+[ec2-user@tomcat ~]$ ls /opt/tomcat9/webapps/
+docs  examples  host-manager  manager  ROOT
+[ec2-user@tomcat ~]$
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+PORT NUMBERS
+22 -----    SSH
+23 ------   FTP
+80 ----     HTTP
+443 ----    HTTPS
+465 ----    SMTP
+587 ----    SMTP
+8080 ----   JENKINS/TOMCAT/JBoss
+9000 -----  SONARQUBE
+0-1024 ---  Reserve ports
+1025 -65535
+A SERVER HAS 65535 PORTS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to find a file: sudo find / -name server.xml
+
+###################################################################################################
+
+#!/bin/bash
+# TOMCAT.SH name is tomcat-install.sh
+# Steps for Installing tomcat9 on rhel7&8
+# install Java JDK 1.8+ as a pre-requisit for tomcat to run.
+# https://github.com/LandmakTechnology/package-management/tree/main/Tomcat-installation
+sudo hostnamectl set-hostname tomcat
+cd /opt 
+sudo yum install git wget vim -y
+sudo yum install java-1.8.0-openjdk-devel -y
+# Download tomcat software and extract it.
+# dowanload and extract tomcat software
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
+
+#extract the apache-tomcat
+sudo tar -xvf apache-tomcat-9.0.70.tar.gz
+sudo rm apache-tomcat-9.0.70.tar.gz
+# rename the apache-tomcat
+sudo mv apache-tomcat-9.0.70 tomcat9
+sudo chmod 777 -R /opt/tomcat9
+sudo sh /opt/tomcat9/bin/startup.sh
+# create a soft link to start and stop tomcat from anywhere 
+# This will enable you to manage tomcat as a service
+sudo ln -s /opt/tomcat9/bin/startup.sh /usr/bin/starttomcat
+sudo ln -s /opt/tomcat9/bin/shutdown.sh /usr/bin/stoptomcat
+sudo starttomcat
+echo "end on tomcat installation"
+sudo su - ec2-user
+#####################################################################################################
+
+#2. Start of tomcat configuration 
+
+#Tomcat server configuration:
+find / -name server.xml context.xml
+vim /opt/tomcat9/conf/server.xml
+vi /opt/tomcat9/webapps/manager/META-INF/context.xml
+vi /opt/tomcat9/conf/tomcat-user.xml  # to add user
+
+  <user username="landmark" password="admin" roles="manager-gui,admin-gui"/>
+  
+
+/opt/tomcat9/conf/context.xml
+
+ vi /opt/tomcat9/webapps/manager/META-INF/context.xml
+  
+  vi /opt/tomcat9/conf/tomcat-user.xml  # to add user
+  
+  
+  username YourName password=PassWord   roles=manager-gui
+
+  ##################################################################################################
