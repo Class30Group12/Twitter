@@ -94,6 +94,9 @@ Still in the /opt directory:
 	and clone the repository :
 
 	[ec2-user@maven java-projects]$ git clone https://github.com/Landmark-Technologies/maven-standalone-application
+	                                git clone https://github.com/Landmark-Technologies/maven-standalone-application
+	                                git clone https://github.com/LandmarkTechnology/maven-web-application
+	                                git clone https://github.com/LandmarkTechnology/maven-enterprise-application
 	check content of the repository with ls
 
  8. maven-standalone-application
